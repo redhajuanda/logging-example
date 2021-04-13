@@ -7,10 +7,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Params type, used to pass to `WithParams`.
+type Params map[string]interface{}
+
 // LoggerWrapper represent common interface for logging function
 type LoggerWrapper interface {
 	With(ctx context.Context, args ...interface{}) LoggerWrapper
 	WithProcess(process func()) LoggerWrapper
+	WithParam(key string, value interface{}) LoggerWrapper
+	WithParams(params Params) LoggerWrapper
 	Errorf(format string, args ...interface{})
 	Error(args ...interface{})
 	Fatalf(format string, args ...interface{})
@@ -46,6 +51,14 @@ func (l *loggerWrapper) With(ctx context.Context, args ...interface{}) LoggerWra
 func (l *loggerWrapper) WithProcess(process func()) LoggerWrapper {
 	runProcess(process)
 	return l
+}
+
+func (l *loggerWrapper) WithParam(key string, value interface{}) LoggerWrapper {
+	return &loggerWrapper{l.WithField(key, value)}
+}
+
+func (l *loggerWrapper) WithParams(params Params) LoggerWrapper {
+	return &loggerWrapper{l.WithFields(logrus.Fields(params))}
 }
 
 func runProcess(command func()) {

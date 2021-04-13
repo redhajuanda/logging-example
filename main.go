@@ -17,8 +17,8 @@ func main() {
 		log.Error("error without trace id")
 
 		ctx := r.Context()
-		log.With(ctx).Error("error with context 1")
-		log.With(ctx).Info("info")
+		log.With(ctx).WithParams(logger.Params{"user_id": "12345", "applicant_id": "987654"}).Error("error with context 1")
+		log.With(ctx).WithParam("user_id", "12345").Info("info")
 		log.With(ctx).Error("error with context 2")
 		log.With(ctx).Debug("debug with context")
 		log.With(ctx).WithProcess(func() { fmt.Println("Run process") }).Error("error with process")
