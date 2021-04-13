@@ -20,7 +20,9 @@ func main() {
 		log.With(ctx).Error("error with context 1")
 		log.With(ctx).Info("info")
 		log.With(ctx).Error("error with context 2")
+		log.With(ctx).Debug("debug with context")
 		log.With(ctx).WithProcess(func() { fmt.Println("Run process") }).Error("error with process")
+
 		w.Write([]byte("welcome"))
 	})
 	http.ListenAndServe(":3000", r)
